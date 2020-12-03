@@ -21,12 +21,12 @@ interface SquareConfig {
   [propName: string]: any
 }
 
-interface Square {
+interface Square1 {
   color?: string
   width?: number
 }
 
-function createSquare(config: SquareConfig): Square {
+function createSquare(config: SquareConfig): Square1 {
   let newSquare = {color: '', area: 200}
   if (config.color) {
     newSquare.color = config.color
@@ -81,3 +81,80 @@ myArray = ['Bob', 'Jess']
 let myStr = myArray[0]
 console.log(myStr)
 //数字索引和字符串索引可以同时使用，但是数字类型必须是字符串类型的字类型
+class Animal {
+  name: string
+}
+class Dog extends Animal {
+  breed: string
+}
+// interface NotOkay {
+//   [x: number]: Animal //数字索引类型“Animal”不能赋给字符串索引类型“Dog
+//   [x: string]: Dog
+// }
+interface NotOkay {
+  [x: number]: Dog
+  [x: string]: Animal
+}
+
+// ---------------类类型
+// 实例接口
+interface ClockInterface {
+  currentTime: Date
+
+  setTime(d: Date)
+}
+// 构造接口
+interface ClockConstructor {
+  new (hour: number, minute: number)
+}
+class Clock implements ClockInterface {
+  currentTime: Date
+  constructor(h: number, m: number) {
+
+  }
+  setTime(d: Date) {
+    this.currentTime = d
+  }
+}
+
+// class Clocks implements ClockConstructor {
+//   currentTime: Date
+//   constructor(h: number, m: number) {
+
+//   }
+//   setTime(d: Date) {
+//     this.currentTime = d
+//   }
+// }
+
+// ---------------继承接口
+
+interface Shape {
+  color: string
+}
+
+interface Square extends Shape {
+  sideLength: number
+}
+
+let square = {} as Square
+square.color = 'blue'
+square.sideLength = 20
+
+// -------------混合类型
+interface Counter {
+  (start: number): string
+  interval: number
+  reset(): void
+}
+
+function getCounter(): Counter {
+  let counter = <Counter>function (start: number) {}
+  counter.interval = 123
+  counter.reset = function () {}
+  return counter
+}
+let c = getCounter()
+c(10)
+c.reset()
+c.interval = 5.0
